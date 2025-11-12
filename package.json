@@ -8,7 +8,8 @@
     "watch": "tsx watch src/main.ts",
     "check": "tsc --noEmit",
     "build": "tsc",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "generate-data": "tsx src/utils/generate-data.ts"
   },
   "keywords": [],
   "author": "",
