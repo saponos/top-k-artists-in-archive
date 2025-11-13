@@ -24,8 +24,8 @@ export async function countArtistAppearancesInFile(
     try {
       const { artist } = JSON.parse(line) as Artist;
       rawArtistAppearances[artist] = (rawArtistAppearances[artist] || 0) + 1;
-    } catch (err) {
-      throw new Error(`Invalid line: ${line}`);
+    } catch (err: unknown) {
+      console.error(`Error parsing line: ${line}`, (err as Error).message);
     }
   }
 

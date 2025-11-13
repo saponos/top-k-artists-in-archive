@@ -1,4 +1,6 @@
-export const TOP_K_ARTISTS = Number(process.env.TOP_K_ARTISTS ?? 10);
+const isTopKProvided = Number(process.env.TOP_K_ARTISTS ?? "10")
+
+export const TOP_K_ARTISTS = isNaN(isTopKProvided) ? 10 : isTopKProvided;
 export const EASY = "easy";
 export const MEDIUM = "medium";
 export const HARD = "hard";

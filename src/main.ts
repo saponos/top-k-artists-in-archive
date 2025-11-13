@@ -18,7 +18,6 @@ const isProduction = process.env.NODE_ENV === "production";
 const workerFile = isProduction ? "./worker.js" : "./worker-dev.mjs";
 const workerUrl = new URL(workerFile, import.meta.url);
 const workerExecArgv = isProduction ? undefined : [...process.execArgv];
-console.time("⏱️  Total processing time");
 
 async function main(): Promise<ArtistAppearance[]> {
   const difficulty = isProduction ? await selectDifficulty() : HARD;
@@ -61,7 +60,7 @@ async function main(): Promise<ArtistAppearance[]> {
     .sort((a, b) => b.appearances - a.appearances)
     .slice(0, TOP_K_ARTISTS);
 }
-
+const start = Date.now();
 main()
   .then((result) => {
     console.log(
@@ -74,6 +73,7 @@ main()
         )
         .join("\n")}\n`
     );
-    console.timeEnd("⏱️  Total processing time");
+    const end = Date.now();
+    console.log(`Time taken: \x1b[32m\x1b[1m${new Date(end - start).getSeconds()}\x1b[0m seconds and \x1b[32m\x1b[1m${new Date(end - start).getMilliseconds()}\x1b[0m milliseconds`);
   })
-  .catch((err) => console.error(err));
+  .catch((err) => console.error((err as Error).message));
