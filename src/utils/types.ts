@@ -1,12 +1,12 @@
 import { EASY, HARD, MEDIUM } from "./const.js";
 
 export interface WorkerMessage {
-  data?: ArtistAppearance[];
+  data?: ArtistAppearanceMap;
   error?: string;
 }
 export type ArtistName = string;
 export type ArtistAppearances = number;
-export type ArtistAppearanceMap = Record<string, number>;
+export type ArtistAppearanceMap = Map<string, number>;
 export interface Artist {
   artist: ArtistName;
 }

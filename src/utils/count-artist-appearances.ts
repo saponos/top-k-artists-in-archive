@@ -2,15 +2,14 @@ import { createReadStream, ReadStream } from "node:fs";
 import { Gunzip } from "node:zlib";
 import type {
   Artist,
-  ArtistAppearance,
   ArtistAppearanceMap,
 } from "./types.js";
 import zlib from "zlib";
 import readline from "readline";
 
-export async function countArtistAppearancesInFile(
+export async function* countArtistAppearancesInFile(
   pathToFile: string
-): Promise<ArtistAppearance[]> {
+): AsyncGenerator<ArtistAppearanceMap> {
   let fileStream: ReadStream | Gunzip = createReadStream(pathToFile);
 
   fileStream = pathToFile.endsWith(".gz")
@@ -19,18 +18,25 @@ export async function countArtistAppearancesInFile(
 
   const rl = readline.createInterface({ input: fileStream });
 
-  const rawArtistAppearances: ArtistAppearanceMap = {};
+  const rawArtistAppearances: ArtistAppearanceMap = new Map();
+  let count = 0;
   for await (const line of rl) {
     try {
       const { artist } = JSON.parse(line) as Artist;
-      rawArtistAppearances[artist] = (rawArtistAppearances[artist] || 0) + 1;
+      rawArtistAppearances.set(artist, (rawArtistAppearances.get(artist) || 0) + 1);
+
+      if (++count > 100_000) {
+        yield rawArtistAppearances;
+        rawArtistAppearances.clear();
+        count = 0;
+      }
     } catch (err: unknown) {
       console.error(`Error parsing line: ${line}`, (err as Error).message);
     }
   }
 
-  return Object.entries(rawArtistAppearances).map(([artist, appearances]) => ({
-    artist,
-    appearances,
-  }));
+  if (rawArtistAppearances.size > 0) {
+    yield rawArtistAppearances;
+  }
+
 }
