@@ -10,7 +10,7 @@
     "build": "tsc",
     "start": "NODE_ENV=production node dist/main.js",
     "check": "tsc --noEmit",
-    "generate-data": "tsx src/utils/generate-data.ts"
+    "generate-data": "tsx src/tools/generate-data.ts"
   },
   "keywords": [],
   "author": "",
