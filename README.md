@@ -1,4 +1,4 @@
-# Top-K Artists in Archive
+# Top-K Artists
 
 A high-performance solution for finding the most frequently appearing artists in large collections of compressed JSONL music log files. This project demonstrates efficient parallel processing, streaming algorithms, and data structure optimization techniques to solve the classic **Top-K problem** at scale.
 
